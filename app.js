@@ -1,5 +1,5 @@
 const gameBoard = (function () {
-  let board = ["X", "X", "X", "O", "O", "O", "", "", ""];
+  let board = ["x", "x", "x", "o", "o", "o", "", "", ""];
 
   function setBoard(index, sign) {
     board[index] = sign;
@@ -63,5 +63,46 @@ const gameController = (function () {
     
   }
 
-  return { makeMove, checkWinner };
+  function whoseTurn(){
+    if (round%2 === 1) return 'x';
+    else if (round%2 ===0) return 'circle'
+  }
+
+
+
+  return { makeMove, checkWinner, whoseTurn };
 })();
+
+
+// const cells  = document.querySelectorAll('.cell');
+
+// cells.forEach((cell)=>{
+//   cell.addEventListener('click', ()=>{
+//     if (gameController.whoseTurn() === 'x'){
+//       cell.classList.add('x')
+//     }
+//     else if (gameController.whoseTurn() === 'circle'){
+//       cell.classList.add('circle')
+//     }
+
+    
+//   })
+// })
+
+const displayController = (function(){
+  const cells = document.querySelectorAll('.cell');
+  function displaySing(){
+    for(let i=0; i<gameBoard.board.length; i++){
+      if(gameBoard.board[i]=== 'x'){
+        cells[i].classList.add('x')
+      }else if(gameBoard.board[i]=== 'o'){
+        cells[i].classList.add('circle')
+      }
+  
+    }
+  }
+
+  return {displaySing}
+
+  
+})()
