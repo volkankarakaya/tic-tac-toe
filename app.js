@@ -1,5 +1,5 @@
 const gameBoard = (function () {
-  let board = ["x", "x", "x", "o", "o", "o", "", "", ""];
+  let board = ["", "", "", "", "", "", "", "", ""];
 
   function setBoard(index, sign) {
     board[index] = sign;
@@ -13,31 +13,36 @@ const gameBoard = (function () {
 })();
 
 const makePlayer = function (name, sign) {
-  const playerName = name;
+  const playerName= name;
   const playerSign = sign;
 
-  function getSign() {
-    return playerSign;
-  }
-  return { playerName, getSign };
+  
+  return { name, sign };
 };
 
 const gameController = (function () {
   const playerX = makePlayer("playerX", "X");
   const playerO = makePlayer("playerO", "O");
   let round = 1;
+  
+
+  // function getSign(){
+  //   if(round%2===1) return 'x';
+  //   else if (round%2===0) return 'o';
+  // }
 
   function makeMove(index) {
+    round++;
     if (gameBoard.board[index] !== "" || !checkWinner()) return;
-    if (round % 2 === 1) {
-      gameBoard.setBoard(index, playerX.getSign());
-      round++;
-    } else if (round % 2 === 0) {
-      gameBoard.setBoard(index, playerO.getSign());
-      round++;
+    if (whoseTurn()=='x') {
+      gameBoard.board[index] = 'x';
+      
+    } else if (whoseTurn()=='o') {
+      gameBoard.board[index] = 'o';
+      
     }
 
-
+    
   }
 
   function checkWinner() {
@@ -65,12 +70,16 @@ const gameController = (function () {
 
   function whoseTurn(){
     if (round%2 === 1) return 'x';
-    else if (round%2 ===0) return 'circle'
+    else if (round%2 ===0) return 'o';
+
+    
+
+    
   }
 
 
 
-  return { makeMove, checkWinner, whoseTurn };
+  return { makeMove, checkWinner, whoseTurn, round };
 })();
 
 
@@ -106,3 +115,15 @@ const displayController = (function(){
 
   
 })()
+
+
+const cells = document.querySelectorAll('.cell');
+    cells.forEach((cell)=>{
+      cell.addEventListener('click', ()=>{
+        const index = cell.id;
+        gameBoard.board[index] = gameController.whoseTurn()
+        displayController.displaySing();
+        gameController.makeMove(index);
+        
+      })
+    })
