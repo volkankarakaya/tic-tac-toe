@@ -1,7 +1,7 @@
 *,  *::after, *::before {
     box-sizing: border-box;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 18px;
+    
 }
  
 :root{
@@ -11,14 +11,14 @@
 }
 
 body{
-    margin: 0;
+    margin: 0px;
     background: #668ba4; 
 }
 
 .board{
     display: grid ;
     background: var(--bg-color);
-    height: 100vh;
+    height: 50vh;
     width: 100vw;
     justify-content: center;
     align-content: center;
@@ -105,4 +105,49 @@ h1{
     width: calc(var(--mark-size) * .7);
     height: calc(var(--mark-size) * .7);
     background-color: var(--bg-color);
+}
+
+.player{
+    text-align: center;
+    color: #feffdf;
+    font-size: 1.5rem;
+    margin-bottom: 64px;
+}
+
+.btn-container{
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    padding: 64px;
+
+}
+
+button{
+    padding: 16px 32px;
+    border: none;
+    background-color: #feffdf;
+    color: black;
+    border-radius: 16px;
+    cursor: pointer;
+}
+
+button:hover{
+    color: #668ba4;
+    background-color: beige;
+}
+
+button:active{
+    transform: scale(1.05);
+}
+
+.footer{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+    align-items: end;
+    color: #feffdf;
+    font-size: 10px;
+    width: 100vw;
+    
 }

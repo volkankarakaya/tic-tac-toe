@@ -33,8 +33,10 @@ const gameController = (function () {
 
   function makeMove(index) {
     round++;
-    if (gameBoard.board[index] !== "" || !checkWinner()) return;
-    if (whoseTurn()=='x') {
+    if (gameBoard.board[index] !== "" || checkWinner()) {
+      return;
+    }
+    else if (whoseTurn()=='x') {
       gameBoard.board[index] = 'x';
       
     } else if (whoseTurn()=='o') {
@@ -59,8 +61,10 @@ const gameController = (function () {
 
     for (const condition of winnerCombos){
         let [a,b,c] = condition;
-        if (gameBoard.getBoard(a)===gameBoard.getBoard(b)&&gameBoard.getBoard(a)===gameBoard.getBoard(c)){
-            return [a,b,c]
+        if (gameBoard.getBoard(a)!=="" && 
+            gameBoard.getBoard(a)===gameBoard.getBoard(b)&&
+            gameBoard.getBoard(a)===gameBoard.getBoard(c)){
+            return gameBoard.getBoard(a)
         }
     };
 
@@ -77,9 +81,13 @@ const gameController = (function () {
     
   }
 
+  function restartGame(){
+    window.location.reload()
+  }
 
 
-  return { makeMove, checkWinner, whoseTurn, round };
+
+  return { makeMove, checkWinner, whoseTurn, restartGame, round };
 })();
 
 
@@ -100,18 +108,36 @@ const gameController = (function () {
 
 const displayController = (function(){
   const cells = document.querySelectorAll('.cell');
-  function displaySing(){
+  const playerDisplay = document.querySelector('.player');
+  function displaySign(){
     for(let i=0; i<gameBoard.board.length; i++){
       if(gameBoard.board[i]=== 'x'){
         cells[i].classList.add('x')
       }else if(gameBoard.board[i]=== 'o'){
         cells[i].classList.add('circle')
+      }else if (gameBoard.board[i]=== ''){
+        cells[i].classList.remove('circle');
+        cells[i].classList.remove('x');
       }
   
     }
   }
 
-  return {displaySing}
+  function updatePlayerDisplay(){
+    let winner = gameController.checkWinner();
+    let text = ""
+    
+    
+    if (winner) {
+      text =  `Player ${winner} Has Won!`    }
+    else{
+      text = gameController.whoseTurn()==='x'? 'Player O Turn' : 'Player X Turn';
+    }
+    playerDisplay.innerHTML = text
+
+  };
+
+  return {displaySign, updatePlayerDisplay}
 
   
 })()
@@ -121,9 +147,18 @@ const cells = document.querySelectorAll('.cell');
     cells.forEach((cell)=>{
       cell.addEventListener('click', ()=>{
         const index = cell.id;
-        gameBoard.board[index] = gameController.whoseTurn()
-        displayController.displaySing();
         gameController.makeMove(index);
-        
+        displayController.displaySign();
+        displayController.updatePlayerDisplay();
       })
     })
+
+const restartBtn = document.querySelector('.restart-btn');
+
+restartBtn.addEventListener('click', ()=>{
+  console.log('clicked')
+  gameController.restartGame();
+  displayController.updatePlayerDisplay();
+  displayController.displaySign();
+  
+})
